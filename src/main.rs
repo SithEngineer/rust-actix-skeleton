@@ -14,11 +14,13 @@ async fn current_health() -> impl Responder {
 #[actix_web::main]
 async fn main() -> Result<(), std::io::Error> {
     let server_port = env::var("SERVER_PORT").unwrap_or("9090".to_string());
+    let server_address = format!("0.0.0.0:{}", server_port);
+    
     HttpServer::new(|| {
         App::new()
             .route("/health-check", web::get().to(current_health))
     })
-        .bind(format!("127.0.0.1:{}", server_port))?
+        .bind(server_address)?
         .run()
         .await
 }

@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  rust-actix-server:
+    container_name: rust-actix-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SERVER_PORT: 8080
+    ports:
+      - 9090:8080
+    volumes:
+    - '.:/usr/src/server'
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9090/health-check" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+
+volumes:
+  registry:
+    driver: local
